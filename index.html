@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button class="btn_logout">
+        Đăng xuất
+    </button>
+    <a href="./profile.html">Profile</a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { signInWithEmailAndPassword, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js'
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js'
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0-8xsPQMrsemg3E_yu8c5Lu4M4RYWBpY",
+            authDomain: "jsi-thang-89ecd.firebaseapp.com",
+            databaseURL: "https://jsi-thang-89ecd-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "jsi-thang-89ecd",
+            storageBucket: "jsi-thang-89ecd.firebasestorage.app",
+            messagingSenderId: "634439871642",
+            appId: "1:634439871642:web:bc39dc20acc8b0ebc88323"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+        const db = getDatabase();
+
+
+        onAuthStateChanged(auth, (user) => {
+            if (user?.email) {
+                onValue(ref(db, 'users'), (snapshot) => {
+                    const data = snapshot.val();
+
+                    console.log(data)
+                })
+            } else {
+                window.location.href = "login.html";
+            }
+        })
+
+        document.querySelector(".btn_logout").addEventListener("click", () => {
+            signOut(auth);
+
+            onAuthStateChanged(auth, (user) => {
+                if (user?.email) {
+                    console.log(user)
+                    // Hiển thị thông tin ra màn hình
+                    // Thiết kế 2 nút: 
+                    //  - đổi mật khẩu
+                    //  - Xóa tài khoản
+                    console.log("Đăng nhập thành công")
+                } else {
+                    window.location.href = "login.html";
+
+                }
+            })
+        })
+        onAuthStateChanged(auth, (user) => {
+            if (user?.email) {
+                console.log(user)
+
+                // Hiển thị thông tin ra màn hình
+                // Thiết kế 2 nút: 
+                //  - đổi mật khẩu
+                //  - Xóa tài khoản
+
+                console.log("Đăng nhập thành công")
+            } else {
+                window.location.href = "login.html";
+
+            }
+        })
+    </script>
+</body>
+
+</html>
